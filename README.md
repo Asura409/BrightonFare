@@ -1,0 +1,22 @@
+# BrightonFare
+
+A standalone student outreach form for City4Christ. A representative shows the QR code in person; the QR opens this form. On submission, the student receives one introduction email with a link to the public [I'm New page](https://city4christ.org/im-new/). The form does not enrol anyone in ongoing mail.
+
+## Stack
+
+- Next.js on Vercel: form and server endpoint
+- Supabase Postgres: submission and email delivery record
+- Resend: one-time welcome email
+
+## Setup
+
+1. Create a Supabase project and run `db/schema.sql` in its SQL editor.
+2. Verify a domain you control with Resend. Set `EMAIL_FROM` to an address on that verified domain. Configure its DNS records as instructed by Resend.
+3. Copy `.env.example` to `.env.local`, then fill in `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` and `EMAIL_FROM`. Keep the service role key and email API key server-side.
+4. Run `npm install` and `npm run dev`.
+5. Deploy the repository to Vercel, set the same environment variables there, and add a subdomain such as `connect.city4christ.org` to the Vercel project. Add the DNS record Vercel specifies in Cloudflare.
+6. Test with an address you own. Verify the email, its reply address and link, the saved contact row, a duplicate submission, and the mobile form. Only then generate the QR code using the final HTTPS form URL.
+
+The server uses the Supabase service role key. The table has row-level security enabled with no public policies. A unique normalized email prevents duplicate records. Resend's idempotency key prevents accidental duplicate welcome messages during retries. A honeypot field reduces basic form spam; for a large public campaign, add a managed bot challenge and request rate limits.
+
+If a delivery fails, the record is marked `failed`; the student can submit again. The site does not provide an admin console: authorized staff can review rows in Supabase. Set a retention process for these contacts before the campaign goes live and update the privacy notice with your precise policy and provider details.

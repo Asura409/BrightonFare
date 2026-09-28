@@ -5,11 +5,13 @@ export const runtime = "nodejs";
 type Contact = {
   id: string;
   first_name: string;
+  last_name: string | null;
   email: string;
   welcome_status: "pending" | "sent" | "failed";
 };
 
 const welcomeUrl = "https://city4christ.org/im-new/";
+const consentVersion = "student-outreach-2026-09-v1";
 
 function databaseConfig() {
   const url = process.env.SUPABASE_URL;
@@ -35,20 +37,36 @@ async function databaseRequest(path: string, init: RequestInit) {
 }
 
 async function findContact(email: string): Promise<Contact | undefined> {
-  const query = new URLSearchParams({ select: "id,first_name,email,welcome_status", email: `eq.${email}`, limit: "1" });
+  const query = new URLSearchParams({ select: "id,first_name,last_name,email,welcome_status", email: `eq.${email}`, limit: "1" });
   const response = await databaseRequest(`?${query}`, { method: "GET" });
   const contacts = (await response.json()) as Contact[];
   return contacts[0];
 }
 
-async function registerContact(firstName: string, email: string): Promise<Contact> {
-  const response = await databaseRequest("?on_conflict=email&select=id,first_name,email,welcome_status", {
+async function registerContact(input: { firstName: string; lastName: string; email: string; phone: string | null; phoneConsent: boolean }): Promise<Contact> {
+  const consentAt = new Date().toISOString();
+  const values = {
+    first_name: input.firstName,
+    last_name: input.lastName,
+    email: input.email,
+    phone: input.phone,
+    phone_contact_opt_in: input.phoneConsent,
+    phone_consented_at: input.phoneConsent ? consentAt : null,
+    consent_at: consentAt,
+    consent_version: consentVersion,
+  };
+  const response = await databaseRequest("?on_conflict=email&select=id,first_name,last_name,email,welcome_status", {
     method: "POST",
     headers: { Prefer: "resolution=ignore-duplicates,return=representation" },
-    body: JSON.stringify({ first_name: firstName, email, source: "brighton-university-qr" }),
+    body: JSON.stringify({ ...values, source: "brighton-university-qr" }),
   });
   const inserted = (await response.json()) as Contact[];
-  return inserted[0] ?? (await findContact(email))!;
+  if (inserted[0]) return inserted[0];
+  const existing = await findContact(input.email);
+  if (!existing) throw new Error("Contact could not be saved");
+  const query = new URLSearchParams({ id: `eq.${existing.id}` });
+  await databaseRequest(`?${query}`, { method: "PATCH", body: JSON.stringify(values) });
+  return { ...existing, first_name: input.firstName, last_name: input.lastName };
 }
 
 async function setStatus(id: string, status: "sent" | "failed") {
@@ -101,12 +119,21 @@ export async function POST(request: NextRequest) {
     if (typeof input !== "object" || input === null) throw new SyntaxError("Invalid form");
     if (input.website) return NextResponse.json({ ok: true });
 
-    const firstName = typeof input.name === "string" ? input.name.trim().replace(/\s+/g, " ") : "";
+    const firstName = typeof input.firstName === "string" ? input.firstName.trim().replace(/\s+/g, " ") : "";
+    const lastName = typeof input.lastName === "string" ? input.lastName.trim().replace(/\s+/g, " ") : "";
     const email = typeof input.email === "string" ? input.email.trim().toLowerCase() : "";
-    if (!firstName || firstName.length > 80 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
-      return NextResponse.json({ error: "Please enter your name and a valid email address." }, { status: 400 });
+    const phone = typeof input.phone === "string" ? input.phone.trim() : "";
+    if (!firstName || firstName.length > 80 || !lastName || lastName.length > 80 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || (phone && !/^\+?[0-9 ()-]{7,25}$/.test(phone))) {
+      return NextResponse.json({ error: "Please check your name, email and phone number." }, { status: 400 });
     }
-    const contact = await registerContact(firstName, email);
+    if (input.emailConsent !== true) {
+      return NextResponse.json({ error: "Please review and agree to how your details will be used." }, { status: 400 });
+    }
+    if (input.phoneConsent === true && !phone) {
+      return NextResponse.json({ error: "A phone number is needed for phone follow-up." }, { status: 400 });
+    }
+    const phoneConsent = input.phoneConsent === true;
+    const contact = await registerContact({ firstName, lastName, email, phone: phoneConsent ? phone : null, phoneConsent });
     if (contact.welcome_status === "sent") return NextResponse.json({ ok: true });
 
     try {

@@ -15,7 +15,7 @@ const consentVersion = "student-outreach-2026-09-v1";
 
 function databaseConfig() {
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("Database is not configured");
   return { base: `${url.replace(/\/$/, "")}/rest/v1/outreach_contacts`, key };
 }
@@ -26,7 +26,9 @@ async function databaseRequest(path: string, init: RequestInit) {
     ...init,
     headers: {
       apikey: key,
-      Authorization: `Bearer ${key}`,
+      // New sb_secret_ keys belong on apikey only; legacy service_role JWTs
+      // also need Authorization for PostgREST.
+      ...(key.startsWith("sb_secret_") ? {} : { Authorization: `Bearer ${key}` }),
       "Content-Type": "application/json",
       ...init.headers,
     },

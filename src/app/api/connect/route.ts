@@ -123,7 +123,7 @@ WHO WE ARE
 City4Christ is a vibrant Christian community in Brighton & Hove. We're a place where students and people from every background can belong, build genuine friendships and discover what it means to follow Jesus.
 
 WHAT WE DO
-We gather to worship, learn from the Bible, pray and grow together. Throughout the week, we also create opportunities to connect, ask honest questions about faith and serve our city. Whether church is familiar to you or completely new, there's a place for you here.
+We gather to worship, learn from the Bible, pray and grow together. Throughout the week, we also create relaxed opportunities to build friendships through sport, games, food and laughter — spaces to connect, ask honest questions about faith and serve our city. Whether church is familiar to you or completely new, there's a place for you here.
 
 HERE'S HOW TO GET CONNECTED
 
@@ -168,7 +168,7 @@ You received this one-time welcome email because you requested an introduction t
                 <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#4c3d52;">City4Christ is a vibrant Christian community in Brighton &amp; Hove. We're a place where students and people from every background can belong, build genuine friendships and discover what it means to follow Jesus.</p>
 
                 <h2 style="margin:0 0 8px;font-size:13px;line-height:1.4;letter-spacing:1.5px;color:#64257b;">WHAT WE DO</h2>
-                <p style="margin:0 0 28px;font-size:16px;line-height:1.7;color:#4c3d52;">We gather to worship, learn from the Bible, pray and grow together. Throughout the week, we also create opportunities to connect, ask honest questions about faith and serve our city. Whether church is familiar to you or completely new, there's a place for you here.</p>
+                <p style="margin:0 0 28px;font-size:16px;line-height:1.7;color:#4c3d52;">We gather to worship, learn from the Bible, pray and grow together. Throughout the week, we also create relaxed opportunities to build friendships through sport, games, food and laughter — spaces to connect, ask honest questions about faith and serve our city. Whether church is familiar to you or completely new, there's a place for you here.</p>
 
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#f8effb;border-radius:12px;">
                   <tr><td style="padding:25px 24px 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#64257b;">YOUR NEXT STEPS</td></tr>

@@ -13,6 +13,8 @@ type Contact = {
 const welcomeUrl = "https://city4christ.org/im-new/";
 const instagramUrl = "https://www.instagram.com/city4christ_uob?stkn=MXd0M3c4dnJ4cWZsOQ%3D%3D&utm_source=qr";
 const whatsappUrl = "https://chat.whatsapp.com/EPUL3XkUvJo2kLLLquaPPi?s=qs&p=i&mlu=0&ilr=4";
+const prayerLine = "+44 01273 021777";
+const prayerLineUrl = "tel:+4401273021777";
 const consentVersion = "student-outreach-2026-09-v1";
 
 function databaseConfig() {
@@ -93,11 +95,12 @@ function escapeHtml(value: string) {
   })[character]!);
 }
 
-async function sendWelcome(contact: Contact) {
+async function sendWelcome(contact: Contact, logoUrl: string) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!apiKey || !from) throw new Error("Email is not configured");
   const name = escapeHtml(contact.first_name);
+  const logoHtmlUrl = escapeHtml(logoUrl);
   const instagramHtmlUrl = escapeHtml(instagramUrl);
   const whatsappHtmlUrl = escapeHtml(whatsappUrl);
   const response = await fetch("https://api.resend.com/emails", {
@@ -133,6 +136,8 @@ ${instagramUrl}
 WhatsApp — join the student community chat:
 ${whatsappUrl}
 
+24/7 Prayer Line: ${prayerLine}
+
 We'd love to see you soon. If you have any questions, simply reply to this email.
 
 With love,
@@ -142,42 +147,43 @@ The City4Christ team
 You received this one-time welcome email because you requested an introduction through our student outreach form.`,
       html: `<!doctype html>
 <html lang="en">
-  <body style="margin:0;padding:0;background-color:#edf3f0;">
+  <body style="margin:0;padding:0;background-color:#f4edf7;">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Meet the City4Christ family and find your next step.</div>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#edf3f0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#f4edf7;">
       <tr>
         <td align="center" style="padding:32px 16px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#ffffff;border:1px solid #e1eae4;border-radius:18px;overflow:hidden;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#fffdfb;border:1px solid #e7d8ed;border-radius:18px;overflow:hidden;">
             <tr>
-              <td style="padding:38px 40px 18px;font-family:Arial,Helvetica,sans-serif;color:#336f5d;font-size:12px;font-weight:700;letter-spacing:2px;">
-                <span style="color:#b98848;font-size:18px;vertical-align:-1px;">&#10022;</span>&nbsp; CITY4CHRIST · BRIGHTON &amp; HOVE
+              <td style="padding:28px 40px 18px;font-family:Arial,Helvetica,sans-serif;text-align:center;background-color:#64257b;">
+                <img src="${logoHtmlUrl}" width="190" alt="City4Christ — The House of Good News" style="display:block;width:190px;height:auto;margin:0 auto;border:0;">
               </td>
             </tr>
             <tr>
-              <td style="padding:8px 40px 40px;font-family:Arial,Helvetica,sans-serif;color:#18372b;">
+              <td style="padding:30px 40px 40px;font-family:Arial,Helvetica,sans-serif;color:#2a1732;">
                 <p style="margin:0 0 12px;font-size:16px;line-height:1.7;">Hi ${name},</p>
-                <h1 style="margin:0 0 22px;font-family:Georgia,'Times New Roman',serif;font-size:38px;line-height:1.12;font-weight:400;letter-spacing:-1px;color:#152a28;">Welcome — we're so glad you're here.</h1>
-                <p style="margin:0 0 26px;font-size:16px;line-height:1.7;color:#53645e;">It was lovely meeting you. Thanks for taking a moment to connect with us.</p>
+                <h1 style="margin:0 0 22px;font-family:Georgia,'Times New Roman',serif;font-size:38px;line-height:1.12;font-weight:400;letter-spacing:-1px;color:#64257b;">Welcome — we're so glad you're here.</h1>
+                <p style="margin:0 0 26px;font-size:16px;line-height:1.7;color:#65566a;">It was lovely meeting you. Thanks for taking a moment to connect with us.</p>
 
-                <h2 style="margin:0 0 8px;font-size:13px;line-height:1.4;letter-spacing:1.5px;color:#336f5d;">WHO WE ARE</h2>
-                <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#3f554c;">City4Christ is a vibrant Christian community in Brighton &amp; Hove. We're a place where students and people from every background can belong, build genuine friendships and discover what it means to follow Jesus.</p>
+                <h2 style="margin:0 0 8px;font-size:13px;line-height:1.4;letter-spacing:1.5px;color:#64257b;">WHO WE ARE</h2>
+                <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#4c3d52;">City4Christ is a vibrant Christian community in Brighton &amp; Hove. We're a place where students and people from every background can belong, build genuine friendships and discover what it means to follow Jesus.</p>
 
-                <h2 style="margin:0 0 8px;font-size:13px;line-height:1.4;letter-spacing:1.5px;color:#336f5d;">WHAT WE DO</h2>
-                <p style="margin:0 0 28px;font-size:16px;line-height:1.7;color:#3f554c;">We gather to worship, learn from the Bible, pray and grow together. Throughout the week, we also create opportunities to connect, ask honest questions about faith and serve our city. Whether church is familiar to you or completely new, there's a place for you here.</p>
+                <h2 style="margin:0 0 8px;font-size:13px;line-height:1.4;letter-spacing:1.5px;color:#64257b;">WHAT WE DO</h2>
+                <p style="margin:0 0 28px;font-size:16px;line-height:1.7;color:#4c3d52;">We gather to worship, learn from the Bible, pray and grow together. Throughout the week, we also create opportunities to connect, ask honest questions about faith and serve our city. Whether church is familiar to you or completely new, there's a place for you here.</p>
 
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#f3f7f4;border-radius:12px;">
-                  <tr><td style="padding:25px 24px 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#336f5d;">YOUR NEXT STEPS</td></tr>
-                  <tr><td style="padding:0 24px 14px;font-family:Arial,Helvetica,sans-serif;"><a href="${welcomeUrl}" style="display:block;padding:14px 16px;background-color:#225b43;border-radius:8px;color:#ffffff;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">Visit our I'm New page &nbsp;→</a></td></tr>
-                  <tr><td style="padding:0 24px 10px;font-family:Arial,Helvetica,sans-serif;"><a href="${instagramHtmlUrl}" style="display:block;padding:12px 16px;border:1px solid #bfd1c6;border-radius:8px;color:#225b43;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">Follow @city4christ_uob on Instagram</a></td></tr>
-                  <tr><td style="padding:0 24px 24px;font-family:Arial,Helvetica,sans-serif;"><a href="${whatsappHtmlUrl}" style="display:block;padding:12px 16px;border:1px solid #bfd1c6;border-radius:8px;color:#225b43;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">Join our student WhatsApp community</a></td></tr>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#f8effb;border-radius:12px;">
+                  <tr><td style="padding:25px 24px 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#64257b;">YOUR NEXT STEPS</td></tr>
+                  <tr><td style="padding:0 24px 14px;font-family:Arial,Helvetica,sans-serif;"><a href="${welcomeUrl}" style="display:block;padding:14px 16px;background-color:#64257b;border-radius:8px;color:#ffffff;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">Visit our I'm New page &nbsp;→</a></td></tr>
+                  <tr><td style="padding:0 24px 10px;font-family:Arial,Helvetica,sans-serif;"><a href="${instagramHtmlUrl}" style="display:block;padding:12px 16px;border:1px solid #d9bde3;border-radius:8px;color:#64257b;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">Follow @city4christ_uob on Instagram</a></td></tr>
+                  <tr><td style="padding:0 24px 24px;font-family:Arial,Helvetica,sans-serif;"><a href="${whatsappHtmlUrl}" style="display:block;padding:12px 16px;border:1px solid #d9bde3;border-radius:8px;color:#64257b;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">Join our student WhatsApp community</a></td></tr>
                 </table>
 
-                <p style="margin:28px 0 0;font-size:16px;line-height:1.7;color:#3f554c;">We'd love to see you soon. If you have any questions, simply reply to this email.</p>
-                <p style="margin:20px 0 0;font-size:16px;line-height:1.7;color:#3f554c;">With love,<br><strong>The City4Christ team</strong><br>2 Rutland Road, Hove, BN3 5FF</p>
+                <p style="margin:28px 0 0;font-size:16px;line-height:1.7;color:#4c3d52;">We'd love to see you soon. If you have any questions, simply reply to this email.</p>
+                <p style="margin:20px 0 0;font-size:16px;line-height:1.7;color:#4c3d52;">24/7 Prayer Line: <a href="${prayerLineUrl}" style="color:#64257b;font-weight:700;">${prayerLine}</a></p>
+                <p style="margin:20px 0 0;font-size:16px;line-height:1.7;color:#4c3d52;">With love,<br><strong>The City4Christ team</strong><br>2 Rutland Road, Hove, BN3 5FF</p>
               </td>
             </tr>
             <tr>
-              <td style="padding:22px 40px;background-color:#18372b;font-family:Arial,Helvetica,sans-serif;color:#cbd9d2;font-size:11px;line-height:1.6;text-align:center;">You received this one-time welcome email because you requested an introduction through our student outreach form.</td>
+              <td style="padding:22px 40px;background-color:#64257b;font-family:Arial,Helvetica,sans-serif;color:#f6eafa;font-size:11px;line-height:1.6;text-align:center;">You received this one-time welcome email because you requested an introduction through our student outreach form.</td>
             </tr>
           </table>
         </td>
@@ -217,7 +223,8 @@ export async function POST(request: NextRequest) {
     if (contact.welcome_status === "sent") return NextResponse.json({ ok: true });
 
     try {
-      await sendWelcome(contact);
+      const logoUrl = new URL("/city4christ_logo.jpeg", request.url).toString();
+      await sendWelcome(contact, logoUrl);
       await setStatus(contact.id, "sent");
     } catch (error) {
       console.error("Welcome delivery failed", error);

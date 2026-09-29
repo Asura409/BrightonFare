@@ -65,7 +65,8 @@ export default function Home() {
   return <main className="shell">
     <div className="ambient ambient-one" /><div className="ambient ambient-two" />
     <section className="card" aria-labelledby="heading">
-      <div className="eyebrow"><span className="sparkle">✦</span> CITY4CHRIST · BRIGHTON & HOVE</div>
+      <img className="brand-logo" src="/city4christ_logo.jpeg" alt="City4Christ — The House of Good News" />
+      <div className="eyebrow">CITY4CHRIST · BRIGHTON & HOVE</div>
       {status === "success" ? <div className="success" role="status">
         <div className="success-icon">✓</div>
         <h1 id="heading">Check your inbox.</h1>
@@ -101,6 +102,6 @@ export default function Home() {
       {phoneConsent && !details?.phone.trim() && <p className="error">Enter a phone number first.</p>}
       <div className="dialog-actions"><button type="button" className="secondary" onClick={closeDialog} disabled={status === "sending"}>Go back</button><button type="button" className="primary" onClick={submit} disabled={!emailConsent || status === "sending"}>{status === "sending" ? "Sending…" : "Agree and send"}</button></div>
     </dialog>
-    <footer>City4Christ Church · Brighton & Hove</footer>
+    <footer>City4Christ Church · Brighton & Hove<br /><strong>24/7 Prayer Line:</strong> <a href="tel:+4401273021777">+44 01273 021777</a></footer>
   </main>;
 }

@@ -75,7 +75,7 @@ export default function Home() {
       </div> : <>
         <div className="hero-mark" aria-hidden="true">✳</div>
         <h1 id="heading">It was lovely<br />meeting you.</h1>
-        <p className="intro">Want to learn a little more about City4Christ? Leave your details and we’ll email you a short introduction. What you do next is entirely up to you.</p>
+        <p className="intro">Want to learn a little more about City4Christ? Leave your details and we’ll email you a short introduction.</p>
         <form ref={form} onSubmit={review}>
           <label htmlFor="firstName">First name</label>
           <input id="firstName" name="firstName" type="text" autoComplete="given-name" maxLength={80} placeholder="First name" required />
